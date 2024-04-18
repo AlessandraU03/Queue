@@ -9,8 +9,46 @@ export class AgendaTelefonica {
 
     agregarContacto(nombre, telefono) {
         const contacto = new Contacto(nombre, telefono);
-        this.agenda.enqueue(contacto);
+        this.insertarOrdenado(contacto);
         this.mostrarMensaje(`Contacto agregado: ${nombre} - ${telefono}`);
+    }
+
+    insertarOrdenado(contacto) {
+        let actual = this.agenda.frente;
+        let anterior = null;
+        // Recorrer la lista enlazada hasta encontrar la posición adecuada para el nuevo contacto
+        while (actual && contacto.nombre > actual.valor.nombre) {
+            anterior = actual;
+            actual = actual.siguiente;
+        }
+        // Insertar el nuevo contacto en la posición encontrada
+        if (!anterior) {
+            // El nuevo contacto será el primero de la lista
+            this.agenda.frente = contacto;
+        } else {
+            anterior.siguiente = contacto;
+        }
+        contacto.siguiente = actual;
+    }
+
+    ordenarPorNombre() {
+        let actual = this.agenda.frente;
+        let cambiar = true;
+        while (cambiar && actual) {
+            cambiar = false;
+            let siguiente = actual.siguiente;
+            while (siguiente) {
+                if (actual.valor.nombre > siguiente.valor.nombre) {
+                    // Intercambiar los valores de los contactos
+                    let temp = actual.valor;
+                    actual.valor = siguiente.valor;
+                    siguiente.valor = temp;
+                    cambiar = true;
+                }
+                siguiente = siguiente.siguiente;
+            }
+            actual = actual.siguiente;
+        }
     }
 
     extraerContacto() {
@@ -24,7 +62,7 @@ export class AgendaTelefonica {
     }
 
     estaVacia() {
-        return this.agenda.tamaño === 0;
+        return this.agenda.isEmpty();
     }
 }
 

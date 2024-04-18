@@ -20,11 +20,12 @@ function agregarContacto() {
 
     if (nombre && telefono) {
         agenda.agregarContacto(nombre, telefono);
+        agenda.ordenarPorNombre(); // Ordenar la agenda después de agregar un contacto
         mostrarContactos();
         nombreInput.value = '';
         telefonoInput.value = '';
     } else {
-        mostrarMensaje('Por favor, ingrese tanto el nombre como el numero telefonico.');
+        mostrarMensaje('Por favor, ingrese tanto el nombre como el número telefónico.');
     }
 }
 
